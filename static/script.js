@@ -7,7 +7,7 @@ async function checkSpam() {
         return;
     }
 
-    let response = await fetch("https://spam-email-detection-1-rjjl.onrender.com", {
+    let response = await fetch("/predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: text })
