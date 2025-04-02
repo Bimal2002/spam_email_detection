@@ -7,7 +7,7 @@ async function checkSpam() {
         return;
     }
 
-    let response = await fetch("/predict", {
+    let response = await fetch("https://flask-spam-detector.vercel.app/predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: text })

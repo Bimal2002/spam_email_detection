@@ -16,17 +16,24 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    data = request.json  # Get input text from frontend
-    text = data.get("text", "")
+    try:
+        data = request.json  # Get input text from frontend
+        text = data.get("text", "").strip()  # Ensure input is a string
 
-    # Convert text into TF-IDF features
-    text_vectorized = vectorizer.transform([text])
+        if not text:
+            return jsonify({"error": "Empty text input"}), 400  # Bad Request
 
-    # Predict spam or ham
-    prediction = model.predict(text_vectorized)[0]
+        # Convert text into TF-IDF features
+        text_vectorized = vectorizer.transform([text])
 
-    # Return result
-    return jsonify({"spam": bool(prediction)})
+        # Predict spam or ham
+        prediction = model.predict(text_vectorized)[0]
+
+        # Return result
+        return jsonify({"spam": bool(prediction)})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  # Internal Server Error
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)  # Use debug=False in production
